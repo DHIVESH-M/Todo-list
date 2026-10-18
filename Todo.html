@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DAYFLOW — Your day, in motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#101816;--panel:#18221f;--panel2:#202c28;--line:#2d3b35;--text:#f3f3e9;--muted:#9aa9a0;--mint:#b7f36b;--orange:#ff9d68;--blue:#85d7d0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+#scene{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.62}
+.shell{position:relative;z-index:1;max-width:1180px;margin:auto;padding:30px 28px 50px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:52px}.brand{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:800;letter-spacing:2.5px}.brand-mark{width:30px;height:30px;border-radius:10px;background:var(--mint);color:#172019;display:grid;place-items:center;font-size:18px;transform:rotate(-8deg)}
+.date-pill{font:11px 'DM Mono',monospace;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:10px 14px;letter-spacing:1px}
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center;margin-bottom:35px}.eyebrow{font:11px 'DM Mono',monospace;color:var(--mint);letter-spacing:2.2px;text-transform:uppercase;margin-bottom:16px}.hero h1{font-size:clamp(42px,6vw,76px);line-height:.99;letter-spacing:-4px;margin:0;font-weight:800;max-width:650px}.hero h1 span{color:var(--mint)}.hero p{color:var(--muted);font-size:14px;line-height:1.8;max-width:470px;margin:22px 0 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:rgba(24,34,31,.86);border:1px solid var(--line);border-radius:17px;padding:17px 16px;backdrop-filter:blur(10px)}.stat .label{font:10px 'DM Mono',monospace;color:var(--muted);letter-spacing:1px;text-transform:uppercase}.stat .num{font-size:28px;font-weight:800;margin:9px 0 2px;letter-spacing:-1px}.stat small{font-size:11px;color:var(--muted)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.7fr);gap:18px;align-items:start}.main-card,.side-card{background:rgba(24,34,31,.9);border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(16px);overflow:hidden;box-shadow:0 24px 80px #0002}.card-head{display:flex;justify-content:space-between;align-items:center;padding:23px 24px 17px}.card-head h2{font-size:17px;margin:0;letter-spacing:-.4px}.sub{font-size:11px;color:var(--muted);margin-top:5px}.count{font:11px 'DM Mono',monospace;color:var(--mint);border:1px solid #405b35;border-radius:8px;padding:7px 9px}
+.add-row{display:flex;gap:9px;padding:0 24px 19px}.task-input{min-width:0;flex:1;background:#111a16;border:1px solid var(--line);border-radius:12px;color:var(--text);padding:14px 15px;font:13px Manrope;outline:none;transition:.2s}.task-input:focus{border-color:var(--mint);box-shadow:0 0 0 3px #b7f36b14}.task-input::placeholder{color:#728178}.add-btn{border:0;border-radius:12px;background:var(--mint);color:#182116;font-weight:800;padding:0 18px;cursor:pointer;transition:.2s}.add-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px #b7f36b22}.filters{display:flex;gap:7px;padding:0 24px 16px;border-bottom:1px solid var(--line)}.filter{background:transparent;border:1px solid transparent;color:var(--muted);font:11px Manrope;padding:8px 12px;border-radius:8px;cursor:pointer}.filter.active{background:#2b3b30;color:var(--mint);border-color:#405b35}.tasks{padding:7px 15px 15px;min-height:125px}.task{display:flex;align-items:center;gap:13px;padding:14px 10px;border-bottom:1px solid #29362f;animation:slideIn .35s both}.task:last-child{border-bottom:0}.check{width:20px;height:20px;flex-shrink:0;border:1.5px solid #607168;border-radius:7px;background:transparent;cursor:pointer;display:grid;place-items:center;color:#172019;font-size:12px;transition:.2s}.task.done .check{background:var(--mint);border-color:var(--mint)}.task-copy{flex:1;min-width:0}.task-title{font-size:13px;overflow-wrap:anywhere}.task.done .task-title{text-decoration:line-through;color:#728178}.task-meta{display:flex;gap:7px;align-items:center;margin-top:6px}.tag{font:9px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.7px;padding:4px 7px;border-radius:5px}.tag.focus{color:var(--orange);background:#ff9d6818}.tag.normal{color:var(--blue);background:#85d7d018}.tag.low{color:var(--mint);background:#b7f36b18}.task-time{font:10px 'DM Mono',monospace;color:#718078}.delete{border:0;background:transparent;color:#65756b;font-size:19px;cursor:pointer;padding:4px 7px;border-radius:7px}.delete:hover{background:#ff9d6818;color:var(--orange)}.empty{text-align:center;padding:34px 12px;color:var(--muted);font-size:12px}.empty b{display:block;color:var(--text);font-size:14px;margin-bottom:6px}
+.side-card{padding:23px;margin-bottom:16px}.side-title{font-size:15px;font-weight:800;margin:0}.side-sub{color:var(--muted);font-size:11px;margin:6px 0 19px}.progress-wrap{display:flex;align-items:center;gap:18px}.ring{width:94px;height:94px;flex-shrink:0;position:relative;display:grid;place-items:center}.ring svg{position:absolute;inset:0;transform:rotate(-90deg)}.ring strong{font-size:22px;letter-spacing:-1px}.ring small{font-size:10px;color:var(--muted);display:block;text-align:center}.progress-copy b{font-size:13px;display:block;margin-bottom:5px}.progress-copy span{font-size:11px;line-height:1.7;color:var(--muted)}
+.focus-box{background:linear-gradient(135deg,#263a2b,#1d2a25);border:1px solid #3d5738;border-radius:15px;padding:17px;margin-top:5px}.focus-top{display:flex;justify-content:space-between;align-items:center}.focus-top span{font:10px 'DM Mono',monospace;color:var(--mint);letter-spacing:1px}.focus-icon{font-size:18px}.focus-box h3{font-size:16px;margin:17px 0 6px}.focus-box p{font-size:11px;color:#a7b6a8;line-height:1.7;margin:0 0 15px}.focus-btn{width:100%;border:1px solid #4d6946;background:#b7f36b;color:#182116;padding:11px;border-radius:9px;font-weight:800;font-size:11px;cursor:pointer}.focus-btn:hover{filter:brightness(1.05)}
+.footer{display:flex;justify-content:space-between;gap:12px;color:#65756b;font:10px 'DM Mono',monospace;margin-top:22px;letter-spacing:.5px}.toast{position:fixed;z-index:5;bottom:24px;left:50%;transform:translate(-50%,20px);opacity:0;background:var(--mint);color:#172019;padding:12px 18px;border-radius:10px;font-size:12px;font-weight:800;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@media(max-width:800px){.hero{grid-template-columns:1fr;gap:25px}.stats{max-width:520px}.workspace{grid-template-columns:1fr}.hero h1{letter-spacing:-2.5px}.topbar{margin-bottom:35px}.shell{padding:22px 16px 35px}.date-pill{font-size:9px}.side-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.side-card{margin:0}}
+@media(max-width:500px){.stats{gap:6px}.stat{padding:13px 10px}.stat .num{font-size:23px}.stat .label{font-size:8px}.card-head{padding:19px 17px 15px}.add-row{padding:0 17px 16px}.filters{padding:0 17px 13px}.tasks{padding:6px 10px 12px}.side-grid{grid-template-columns:1fr}.hero h1{font-size:48px}.footer{flex-direction:column}}
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">↗</div> DAYFLOW</div>
+    <div class="date-pill" id="dateLabel">YOUR DAY, YOUR PACE</div>
+  </header>
+  <section class="hero">
+    <div>
+      <div class="eyebrow">✳ A little more intentional</div>
+      <h1>Make today<br><span>count.</span></h1>
+      <p>Less mental clutter. More meaningful progress. Put your thoughts into a plan and give your day some direction.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="label">Total tasks</div><div class="num" id="totalStat">0</div><small>on your list</small></div>
+      <div class="stat"><div class="label">Completed</div><div class="num" id="doneStat">0</div><small>small wins</small></div>
+      <div class="stat"><div class="label">To go</div><div class="num" id="leftStat">0</div><small>keep moving</small></div>
+    </div>
+  </section>
+  <section class="workspace">
+    <div class="main-card">
+      <div class="card-head"><div><h2>Your task list</h2><div class="sub">One step at a time. You've got this.</div></div><span class="count" id="taskCount">00 TASKS</span></div>
+      <form class="add-row" id="taskForm"><input class="task-input" id="taskInput" maxlength="140" placeholder="What do you want to get done?" autocomplete="off" aria-label="New task"><button class="add-btn" type="submit">+ Add task</button></form>
+      <div class="filters" id="filters"><button class="filter active" data-filter="all">All tasks</button><button class="filter" data-filter="active">In progress</button><button class="filter" data-filter="done">Completed</button></div>
+      <div class="tasks" id="tasks"></div>
+    </div>
+    <aside>
+      <div class="side-card">
+        <h2 class="side-title">Daily momentum</h2><p class="side-sub">Progress is progress, no matter the size.</p>
+        <div class="progress-wrap"><div class="ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#2d3b35" stroke-width="7"/><circle id="progressArc" cx="50" cy="50" r="42" fill="none" stroke="#b7f36b" stroke-width="7" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264"/></svg><div><strong id="progressPercent">0%</strong><small>complete</small></div></div><div class="progress-copy"><b id="progressHeadline">Fresh start.</b><span id="progressText">Add a task to turn your plans into progress.</span></div></div>
+      </div>
+      <div class="side-card">
+        <h2 class="side-title">A nudge for you</h2><p class="side-sub">A tiny reminder to keep the day yours.</p>
+        <div class="focus-box"><div class="focus-top"><span>THE DAILY RESET</span><div class="focus-icon">✳</div></div><h3>Start with one thing.</h3><p>Pick the task that would make today feel like a win. Give it your attention before the noise takes over.</p><button class="focus-btn" id="focusBtn">Choose my next task ↗</button></div>
+      </div>
+    </aside>
+  </section>
+  <footer class="footer"><span>DAYFLOW © 2026</span><span>BUILT FOR YOUR NEXT SMALL WIN</span></footer>
+</div>
+<div class="toast" id="toast">Task added</div>
+<script>
+const $=s=>document.querySelector(s);
+const today=new Date();
+$('#dateLabel').textContent=today.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}).toUpperCase();
+let tasks=[];
+try{tasks=JSON.parse(localStorage.getItem('dayflow-tasks')||'[]')}catch(e){tasks=[]}
+if(!Array.isArray(tasks))tasks=[];
+let currentFilter='all';
+const safeText=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function persist(){localStorage.setItem('dayflow-tasks',JSON.stringify(tasks))}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('show'),1800)}
+function render(){
+ const done=tasks.filter(t=>t.done).length,total=tasks.length,left=total-done,pct=total?Math.round(done/total*100):0;
+ $('#totalStat').textContent=total;$('#doneStat').textContent=done;$('#leftStat').textContent=left;
+ $('#taskCount').textContent=String(total).padStart(2,'0')+' TASKS';$('#progressPercent').textContent=pct+'%';
+ $('#progressArc').style.strokeDashoffset=264-(264*pct/100);
+ $('#progressHeadline').textContent=total===0?'Fresh start.':pct===100?'You did it!':pct>=50?'Great momentum.':'You’re building momentum.';
+ $('#progressText').textContent=total===0?'Add a task to turn your plans into progress.':pct===100?'Every task checked off. Enjoy that feeling.':`${done} of ${total} tasks done. Keep your pace steady.`;
+ document.querySelectorAll('.filter').forEach(b=>b.classList.toggle('active',b.dataset.filter===currentFilter));
+ const visible=tasks.filter(t=>currentFilter==='all'||(currentFilter==='active'&&!t.done)||(currentFilter==='done'&&t.done));
+ if(!visible.length){$('#tasks').innerHTML=`<div class="empty"><b>${tasks.length===0?'A clean slate.':currentFilter==='done'?'No completed tasks yet.':'All clear here.'}</b>${tasks.length===0?'Add your first task above and build a little momentum.':'Try another filter or add a new task.'}</div>`;return}
+ $('#tasks').innerHTML=visible.map((t)=>`<div class="task ${t.done?'done':''}" data-id="${t.id}"><button class="check" aria-label="${t.done?'Mark incomplete':'Complete task'}" data-action="toggle">${t.done?'✓':''}</button><div class="task-copy"><div class="task-title">${safeText(t.title)}</div><div class="task-meta"><span class="tag ${t.priority}">${t.priority==='focus'?'Priority':t.priority==='normal'?'Regular':'Quick win'}</span><span class="task-time">${safeText(t.time)}</span></div></div><button class="delete" aria-label="Delete task" data-action="delete">×</button></div>`).join('');
+}
+$('#taskForm').addEventListener('submit',e=>{e.preventDefault();const input=$('#taskInput'),title=input.value.trim();if(!title){input.focus();return}tasks.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),title,done:false,priority:'normal',time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});persist();currentFilter='all';input.value='';render();toast('Task added — nice start!');});
+$('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;currentFilter=b.dataset.filter;render()});
+$('#tasks').addEventListener('click',e=>{const btn=e.target.closest('[data-action]');if(!btn)return;const taskEl=btn.closest('.task');const t=tasks.find(x=>x.id===taskEl.dataset.id);if(!t)return;if(btn.dataset.action==='toggle'){t.done=!t.done;toast(t.done?'One more win ✳':'Task reopened')}else{tasks=tasks.filter(x=>x.id!==t.id);toast('Task removed')}persist();render()});
+$('#focusBtn').addEventListener('click',()=>{const next=tasks.find(t=>!t.done);if(!next){toast(tasks.length?'Everything is complete. Take a breath!':'Add a task first, then pick your focus.');$('#taskInput').focus();return}toast('Your next task: '+next.title);const el=document.querySelector(`.task[data-id="${next.id}"]`);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.animate([{background:'#b7f36b22'},{background:'transparent'}],{duration:1200})}else{currentFilter='all';render();setTimeout(()=>{const target=document.querySelector(`.task[data-id="${next.id}"]`);target?.scrollIntoView({behavior:'smooth',block:'center'})},50)}});
+// Three.js ambient 3D scene: drifting points and wireframe geometry.
+</script>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js';
+const canvas=document.getElementById('scene');
+try{
+ const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.setSize(innerWidth,innerHeight);
+ const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,.1,100);camera.position.z=20;
+ const group=new THREE.Group();scene.add(group);
+ const points=[];for(let i=0;i<480;i++)points.push((Math.random()-.5)*48,(Math.random()-.5)*32,(Math.random()-.5)*18);
+ const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(points,3));
+ const mat=new THREE.PointsMaterial({color:0xb7f36b,size:.055,transparent:true,opacity:.7,sizeAttenuation:true});
+ const stars=new THREE.Points(geo,mat);group.add(stars);
+ const shapes=[];
+ for(let i=0;i<8;i++){
+  const g=new THREE.IcosahedronGeometry(.45+Math.random()*.65,1);
+  const m=new THREE.MeshBasicMaterial({color:i%2?0x85d7d0:0xb7f36b,wireframe:true,transparent:true,opacity:.18});
+  const mesh=new THREE.Mesh(g,m);mesh.position.set((Math.random()-.5)*30,(Math.random()-.5)*19,-2-Math.random()*8);
+  mesh.userData={speed:.001+Math.random()*.003,offset:Math.random()*6.28};group.add(mesh);shapes.push(mesh);
+ }
+ let mx=0,my=0;addEventListener('pointermove',e=>{mx=(e.clientX/innerWidth-.5)*.5;my=(e.clientY/innerHeight-.5)*.3},{passive:true});
+ addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.6))});
+ const clock=new THREE.Clock();
+ function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();stars.rotation.y=t*.009;stars.rotation.x=Math.sin(t*.08)*.025;group.rotation.y+=(mx-group.rotation.y)*.015;group.rotation.x+=(-my-group.rotation.x)*.015;shapes.forEach((s,i)=>{s.rotation.x=t*s.userData.speed*20;s.rotation.y=t*s.userData.speed*27;s.position.y+=Math.sin(t*.4+s.userData.offset)*.0018});renderer.render(scene,camera)}
+ animate();
+}catch(e){console.warn('3D background unavailable; task list remains fully functional.',e)}
+</script>
+</body>
+</html>
